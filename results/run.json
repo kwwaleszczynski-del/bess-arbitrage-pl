@@ -1,0 +1,40 @@
+{
+  "series": "rce",
+  "start": "2024-06-14",
+  "end": "2026-10-20",
+  "summary": [
+    {
+      "duration_h": 1.0,
+      "rte": 0.87,
+      "max_cycles": 1.5,
+      "degradation_cost": 30.0,
+      "days": 859,
+      "revenue_pln_per_mw_year": 198413.80348721176,
+      "revenue_pln_per_mwh_year": 198413.80348721176,
+      "avg_cycles_per_day": 1.3924406060233236,
+      "share_days_no_trade": 0.0
+    },
+    {
+      "duration_h": 2.0,
+      "rte": 0.87,
+      "max_cycles": 1.5,
+      "degradation_cost": 30.0,
+      "days": 859,
+      "revenue_pln_per_mw_year": 365070.2732825227,
+      "revenue_pln_per_mwh_year": 182535.13664126134,
+      "avg_cycles_per_day": 1.3710828197756906,
+      "share_days_no_trade": 0.0
+    },
+    {
+      "duration_h": 4.0,
+      "rte": 0.87,
+      "max_cycles": 1.5,
+      "degradation_cost": 30.0,
+      "days": 859,
+      "revenue_pln_per_mw_year": 599772.3293058397,
+      "revenue_pln_per_mwh_year": 149943.08232645993,
+      "avg_cycles_per_day": 1.2527779224172895,
+      "share_days_no_trade": 0.0
+    }
+  ]
+}
