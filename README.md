@@ -75,7 +75,8 @@ Days with 92 or 100 intervals (daylight saving changes) are handled naturally; i
 
 **Data**: `rce-pln` series from the public PSE API (`https://api.raporty.pse.pl/api`), 15-minute resolution,
 available from 14 June 2024. The `sdac` series (day-ahead coupling price) is also supported. Data are downloaded on
-demand and cached locally as monthly Parquet files; they are not part of this repository.
+demand with [pse-opendata](https://pypi.org/project/pse-opendata/) and cached locally as monthly Parquet files (a
+month is downloaded again until three days after its end); they are not part of this repository.
 
 ## Limitations
 
@@ -101,7 +102,7 @@ Results are written to `results/` (daily CSVs, summary, sensitivity) and charts 
 
 ```
 src/bess_arbitrage/
-  pse_api.py     PSE API client, pagination, monthly Parquet cache
+  pse_api.py     PSE price series through pse-opendata (monthly Parquet cache)
   optimizer.py   daily MILP dispatch
   backtest.py    day-by-day backtest, annual summary, market statistics
   plots.py       charts
