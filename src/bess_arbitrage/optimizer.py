@@ -11,8 +11,9 @@ subject to
     0 <= c_t <= P * u_t,  0 <= d_t <= P * (1 - u_t),  u_t binary     (no simultaneous charge/discharge)
     sum_t dt * d_t <= max_cycles * usable_energy                     (warranty-style throughput cap)
 
-Perfect foresight of day-ahead prices is realistic for the day-ahead market (prices are known the day
-before delivery), so the result is an upper bound for a pure day-ahead arbitrage strategy.
+The prices are taken as known (perfect foresight). They are not known when bidding: day-ahead bids are
+submitted before the auction and the price is its result. The schedule is therefore an upper bound for a
+pure day-ahead arbitrage strategy, not a plan an operator could have submitted.
 
 Usage:
     from bess_arbitrage import BatteryParams, optimize_day

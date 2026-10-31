@@ -61,6 +61,26 @@ def summarize(daily: pd.DataFrame, params: BatteryParams) -> dict:
     }
 
 
+def yearly(daily: pd.DataFrame, params: BatteryParams) -> pd.DataFrame:
+    """Calendar-year revenue per MW of power, mean daily max-min spread and average buy and sell prices.
+
+    Buy and sell prices are weighted by the energy discharged each day (with soc_end = soc_start the energy charged
+    is the energy discharged divided by the round-trip efficiency, so one weight serves both).
+    """
+    df = daily.assign(year=pd.to_datetime(daily.index).year, w=daily["discharged_mwh"])
+    df["buy_w"] = df["avg_buy_price"].fillna(0.0) * df["w"]
+    df["sell_w"] = df["avg_sell_price"].fillna(0.0) * df["w"]
+    g = df.groupby("year")
+    return pd.DataFrame({
+        "duration_h": params.energy_mwh / params.power_mw,
+        "days": g.size(),
+        "revenue_pln_per_mw": g["revenue_pln"].sum() / params.power_mw,
+        "mean_daily_spread": g["spread_max_min"].mean(),
+        "avg_buy_price": g["buy_w"].sum() / g["w"].sum(),
+        "avg_sell_price": g["sell_w"].sum() / g["w"].sum(),
+    })
+
+
 def price_stats(prices: pd.DataFrame) -> pd.DataFrame:
     """Monthly market statistics: mean price, daily spread, negative-price intervals."""
     df = prices.copy()

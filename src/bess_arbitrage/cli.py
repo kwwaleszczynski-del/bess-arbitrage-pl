@@ -19,7 +19,7 @@ from pathlib import Path
 import pandas as pd
 
 from bess_arbitrage import plots
-from bess_arbitrage.backtest import price_stats, run_backtest, summarize
+from bess_arbitrage.backtest import price_stats, run_backtest, summarize, yearly
 from bess_arbitrage.optimizer import BatteryParams
 from bess_arbitrage.pse_api import SERIES, fetch_range
 
@@ -43,7 +43,7 @@ def cmd_run(args):
     monthly = price_stats(prices)
     monthly.to_csv(args.results_dir / f"{args.series}_monthly_stats.csv")
 
-    results, summaries = {}, []
+    results, summaries, years = {}, [], []
     for dur in args.durations:
         params = BatteryParams(power_mw=args.power, energy_mwh=args.power * dur, round_trip_efficiency=args.rte,
                                max_cycles_per_day=args.cycles, degradation_cost=args.deg_cost)
@@ -52,6 +52,7 @@ def cmd_run(args):
         results[label] = daily
         daily.to_csv(args.results_dir / f"{args.series}_daily_{label}.csv")
         summaries.append(summarize(daily, params))
+        years.append(yearly(daily, params))
         log.info("%s: %.0f PLN/MW/year over %d days", label, summaries[-1]["revenue_pln_per_mw_year"], len(daily))
         if dur == 2:
             best_day = daily["revenue_pln"].idxmax()
@@ -65,6 +66,7 @@ def cmd_run(args):
                                    max_cycles_per_day=cycles, degradation_cost=args.deg_cost)
             sens.append(summarize(run_backtest(prices, params), params))
     pd.DataFrame(summaries).to_csv(args.results_dir / f"{args.series}_summary.csv", index=False)
+    pd.concat(years).to_csv(args.results_dir / f"{args.series}_yearly.csv")
     pd.DataFrame(sens).to_csv(args.results_dir / f"{args.series}_sensitivity_2h.csv", index=False)
 
     plots.price_heatmap(prices, args.img_dir / "price_heatmap.png")
