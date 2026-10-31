@@ -35,7 +35,7 @@ def price_heatmap(prices: pd.DataFrame, path: Path):
     ax.set_xticks(range(0, len(table.index), 3), [str(m) for m in table.index[::3]], rotation=45, ha="right")
     ax.set_ylabel("Hour of day (local time)")
     ax.set_title("Average price by hour and month [PLN/MWh]")
-    fig.colorbar(im, ax=ax)
+    fig.colorbar(im, ax=ax).set_label("PLN/MWh")
     _save(fig, path)
 
 
@@ -75,6 +75,9 @@ def example_day(schedule: pd.DataFrame, title: str, path: Path):
     ax3 = ax2.twinx()
     ax3.plot(s.index, s["soc_mwh"], color="black", lw=1.2, label="state of charge")
     ax3.set_ylabel("SoC [MWh]")
-    ax2.legend(loc="upper left")
+    # one legend for both axes under the panel; inside it the SoC line crossed it
+    handles = ax2.get_legend_handles_labels()[0] + ax3.get_legend_handles_labels()[0]
+    ax2.legend(handles, [h.get_label() for h in handles], loc="upper left", bbox_to_anchor=(0, -0.18), ncol=3,
+               frameon=False)
     ax2.grid(alpha=0.3)
     _save(fig, path)
